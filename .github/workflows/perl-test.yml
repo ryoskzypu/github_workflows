@@ -1,0 +1,154 @@
+name: 'Build & Test'
+description: 'CI for Perl tests on Linux'
+
+on:
+  workflow_call:
+    inputs:
+      since-perl:
+        description: 'Test with all perls since given version'
+        type: string
+        required: true
+
+        # Require no newer version of perl than one released in the last ten years,
+        # following the agreement of the Perl Toolchain Gang.
+        default: 'v5.24.0'
+
+      to-perl:
+        description: 'Test with all perls up to given version'
+        type: string
+
+      with-devel:
+        description: "Whether to test also with 'devel' perl"
+        type: boolean
+        default: false
+
+      unstable:
+        description: 'Which perl versions are considered unstable. Value is JSON array.'
+        type: string
+        default: "[ 'devel' ]"
+
+jobs:
+
+  # Fast test on system perl
+
+  ubuntu-latest:
+    runs-on: ubuntu-latest
+
+    # Prevent the entire test of failing if minimum perl version from distribution
+    # is newer than Ubuntu's system perl version.
+    continue-on-error: true
+
+    env:
+      PERL_USE_UNSAFE_INC: 0
+      AUTHOR_TESTING: 1
+      AUTOMATED_TESTING: 1
+      RELEASE_TESTING: 1
+      PERL_CARTON_PATH: $GITHUB_WORKSPACE/local
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: perl -V
+      - name: Install deps using cpanm
+        uses: perl-actions/install-with-cpanm@v1
+        with:
+          sudo: false
+          args: --sudo --installdeps --with-recommends .
+
+      - name: Show cpanm errors on Ubuntu
+        if:  ${{ failure() }}
+        run: |
+           cat /home/runner/.cpanm/work/*/build.log
+
+      - name: Configure with Build.PL
+        if: ${{ hashFiles('/Build.PL') != '' }}
+        run: perl Build.PL
+      - name: Build with Build.PL
+        if: ${{ hashFiles('/Build.PL') != '' }}
+        run: ./Build
+      - name: Test with Build.PL
+        if: ${{ hashFiles('/Build.PL') != '' }}
+        run: ./Build test verbose=1
+
+      - name: Configure with Makefile.PL
+        if: ${{ hashFiles('/Build.PL') == '' }}
+        run: perl Makefile.PL
+      - name: Build with Makefile.PL
+        if: ${{ hashFiles('/Build.PL') == '' }}
+        run: make
+      - name: Test with Makefile.PL
+        if: ${{ hashFiles('/Build.PL') == '' }}
+        run: make test TEST_VERBOSE=1
+
+  # Linux testing - multiple perl versions
+
+  perl-versions:
+    runs-on: ubuntu-latest
+    name: List perl versions
+    outputs:
+      perl-versions: ${{ steps.action.outputs.perl-versions }}
+    steps:
+      - id: action
+        uses: perl-actions/perl-versions@v1
+        with:
+          since-perl: ${{ inputs.since-perl }}
+          to-perl: ${{ inputs.to-perl }}
+          with-devel: ${{ inputs.with-devel }}
+
+  linux:
+    runs-on: ubuntu-latest
+    name: "perl ${{ matrix.perl-version }}"
+    continue-on-error: ${{ contains (fromJson (inputs.unstable), matrix.perl-version) }}
+
+    needs:
+      - ubuntu-latest
+      - perl-versions
+
+    strategy:
+      fail-fast: false
+      matrix:
+        perl-version: ${{ fromJson (needs.perl-versions.outputs.perl-versions) }}
+
+    container:
+      image: perldocker/perl-tester:${{ matrix.perl-version }}
+
+    steps:
+      - uses: actions/checkout@v6
+      - run: perl -V
+      - name: Install deps using cpanm
+        uses: perl-actions/install-with-cpanm@v1
+        with:
+          sudo: false
+          args: -v --installdeps --with-recommends .
+
+      - name: Show cpanm errors on Ubuntu
+        if:  ${{ failure() }}
+        run: |
+           cat /home/runner/.cpanm/work/*/build.log
+
+      - name: Configure with Build.PL
+        if: ${{ hashFiles('/Build.PL') != '' }}
+        run: perl Build.PL
+      - name: Build with Build.PL
+        if: ${{ hashFiles('/Build.PL') != '' }}
+        run: ./Build
+      - name: Test with Build.PL
+        if: ${{ hashFiles('/Build.PL') != '' }}
+        run: ./Build test
+        env:
+          AUTHOR_TESTING: 1
+          AUTOMATED_TESTING: 1
+          RELEASE_TESTING: 1
+
+      - name: Configure with Makefile.PL
+        if: ${{ hashFiles('/Build.PL') == '' }}
+        run: perl Makefile.PL
+      - name: Build with Makefile.PL
+        if: ${{ hashFiles('/Build.PL') == '' }}
+        run: make
+      - name: Test with Makefile.PL
+        if: ${{ hashFiles('/Build.PL') == '' }}
+        run: make test
+        env:
+          AUTHOR_TESTING: 1
+          AUTOMATED_TESTING: 1
+          RELEASE_TESTING: 1
