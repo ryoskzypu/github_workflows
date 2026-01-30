@@ -117,7 +117,8 @@ jobs:
         include:
           - perl-version: 'latest'
         exclude:
-          - perl-version: ${{ inputs.coverage == false && 'latest' }}
+          #- perl-version: ${{ inputs.coverage == false && 'latest' }}
+          - perl-version: 'latest'
 
     container:
       image: perldocker/perl-tester:${{ matrix.perl-version }}
