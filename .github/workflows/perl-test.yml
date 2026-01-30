@@ -103,9 +103,6 @@ jobs:
     runs-on: ubuntu-latest
     name: "perl ${{ matrix.perl-version }}"
 
-    # Skip perl 'latest' unless coverage is wanted.
-    if: ${{ inputs.coverage == true || matrix.perl-version != 'latest' }}
-
     permissions:
       contents: read
 
@@ -126,6 +123,10 @@ jobs:
       image: perldocker/perl-tester:${{ matrix.perl-version }}
 
     steps:
+      - name: Skip perl 'latest' unless coverage is wanted
+        if: ${{ inputs.coverage == false && matrix.perl-version == 'latest' }}
+        run: exit 1
+
       - uses: actions/checkout@v6
       - run: perl -V
       - name: Install deps using cpanm
