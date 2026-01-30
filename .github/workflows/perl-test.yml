@@ -168,7 +168,7 @@ jobs:
           RELEASE_TESTING: 1
 
       - name: Report test coverage
-        if: ${{ inputs.coverage == true && $matrix.perl-version == 'latest' }}
+        if: ${{ inputs.coverage == true && matrix.perl-version == 'latest' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: cover -test -report Coveralls
