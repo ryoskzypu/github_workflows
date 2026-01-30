@@ -102,8 +102,13 @@ jobs:
   linux:
     runs-on: ubuntu-latest
     name: "perl ${{ matrix.perl-version }}"
+
+    # Skip perl 'latest' unless coverage is wanted.
+    if: ${{ inputs.coverage == true || matrix.perl-version != 'latest' }}
+
     permissions:
       contents: read
+
     continue-on-error: ${{ contains (fromJson (inputs.unstable), matrix.perl-version) }}
 
     needs:
@@ -115,9 +120,6 @@ jobs:
       matrix:
         perl-version: ${{ fromJson (needs.perl-versions.outputs.perl-versions) }}
         include:
-          - perl-version: 'latest'
-        exclude:
-          #- perl-version: ${{ inputs.coverage == false && 'latest' }}
           - perl-version: 'latest'
 
     container:
