@@ -27,6 +27,10 @@ on:
         type: string
         default: "[ 'devel' ]"
 
+      coverage:
+        description: 'Report test coverage to Coveralls.io'
+        type: boolean
+
 jobs:
 
   # Fast test on system perl
@@ -97,6 +101,8 @@ jobs:
   linux:
     runs-on: ubuntu-latest
     name: "perl ${{ matrix.perl-version }}"
+    permissions:
+      contents: read
     continue-on-error: ${{ contains (fromJson (inputs.unstable), matrix.perl-version) }}
 
     needs:
@@ -107,6 +113,8 @@ jobs:
       fail-fast: false
       matrix:
         perl-version: ${{ fromJson (needs.perl-versions.outputs.perl-versions) }}
+        include:
+          - perl-version: 'latest'
 
     container:
       image: perldocker/perl-tester:${{ matrix.perl-version }}
@@ -122,8 +130,7 @@ jobs:
 
       - name: Show cpanm errors on Ubuntu
         if:  ${{ failure() }}
-        run: |
-           cat /home/runner/.cpanm/work/*/build.log
+        run: cat /home/runner/.cpanm/work/*/build.log
 
       - name: Configure with Build.PL
         if: ${{ hashFiles('/Build.PL') != '' }}
@@ -152,3 +159,9 @@ jobs:
           AUTHOR_TESTING: 1
           AUTOMATED_TESTING: 1
           RELEASE_TESTING: 1
+
+      - name: Report test coverage
+        if: ${{ inputs.coverage == true }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: cover -test -report Coveralls
