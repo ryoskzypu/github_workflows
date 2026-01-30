@@ -90,7 +90,7 @@ jobs:
     runs-on: ubuntu-latest
     name: List perl versions
     outputs:
-      perl-versions: ${{ steps.action.outputs.perl-versions }}
+      perl-versions: ${{ steps.massage.outputs.perl-versions }}
     steps:
       - id: action
         uses: perl-actions/perl-versions@v1
@@ -98,6 +98,12 @@ jobs:
           since-perl: ${{ inputs.since-perl }}
           to-perl: ${{ inputs.to-perl }}
           with-devel: ${{ inputs.with-devel }}
+
+      - id: massage
+        #if: ${{ inputs.coverage == true }}
+        name: Add perl 'latest' if coverage is wanted
+        run: |
+          echo '${{ steps.action.outputs.perl-versions }}'
 
   linux:
     runs-on: ubuntu-latest
@@ -116,17 +122,11 @@ jobs:
       fail-fast: false
       matrix:
         perl-version: ${{ fromJson (needs.perl-versions.outputs.perl-versions) }}
-        include:
-          - perl-version: 'latest'
 
     container:
       image: perldocker/perl-tester:${{ matrix.perl-version }}
 
     steps:
-      - name: Skip perl 'latest' unless coverage is wanted
-        if: ${{ inputs.coverage == false && matrix.perl-version == 'latest' }}
-        run: exit 1
-
       - uses: actions/checkout@v6
       - run: perl -V
       - name: Install deps using cpanm
@@ -168,7 +168,7 @@ jobs:
           RELEASE_TESTING: 1
 
       - name: Report test coverage
-        if: ${{ inputs.coverage == true }}
+        if: ${{ inputs.coverage == true && $matrix.perl-version == 'latest' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: cover -test -report Coveralls
