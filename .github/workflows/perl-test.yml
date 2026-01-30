@@ -30,6 +30,7 @@ on:
       coverage:
         description: 'Report test coverage to Coveralls.io'
         type: boolean
+        default: false
 
 jobs:
 
@@ -115,6 +116,8 @@ jobs:
         perl-version: ${{ fromJson (needs.perl-versions.outputs.perl-versions) }}
         include:
           - perl-version: 'latest'
+        exclude:
+          - perl-version: ${{ inputs.coverage == false && 'latest' }}
 
     container:
       image: perldocker/perl-tester:${{ matrix.perl-version }}
