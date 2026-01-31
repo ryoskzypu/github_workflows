@@ -189,10 +189,7 @@ jobs:
         run: cover -test -report Coveralls
 
       - name: 'Run perlcritic'
-        #if: ${{ inputs.critic == true && matrix.perl-version == 'latest' }}
-        if: ${{ matrix.perl-version == 'latest' }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: ${{ inputs.critic == true && matrix.perl-version == 'latest' }}
         shell: bash
         run: |
           if [[ -f 'xt/critic.t' ]]; then
