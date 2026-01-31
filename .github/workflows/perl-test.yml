@@ -32,6 +32,11 @@ on:
         type: boolean
         default: false
 
+      critic:
+        description: 'Run perlcritic against distribution files'
+        type: boolean
+        default: false
+
 jobs:
   # Test system perl on Linux
   ubuntu-latest:
@@ -182,3 +187,22 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: cover -test -report Coveralls
+
+      - name: 'Run perlcritic'
+        #if: ${{ inputs.critic == true && matrix.perl-version == 'latest' }}
+        if: ${{ matrix.perl-version == 'latest' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          if [[ -f 'xt/critic.t' ]]; then
+              cpanm --notest Test::Perl::Critic
+              prove --verbose xt/critic.t
+          else
+              printf '%s\n' 'critic.t does not exist'
+              exit 0
+          fi
+
+      - name: 'Show cpanm errors on failure'
+        if:  ${{ failure() }}
+        run: cat /home/runner/.cpanm/work/*/build.log
