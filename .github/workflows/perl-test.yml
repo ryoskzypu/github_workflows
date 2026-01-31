@@ -109,8 +109,7 @@ jobs:
                   my $j = decode_json($_);
                   push $j->@*, "latest" unless grep { $_ eq "latest" } $j->@*;
                   print encode_json($j);
-              '
-              perl.versions
+              ' perl.versions
           fi
 
           cat perl.versions
