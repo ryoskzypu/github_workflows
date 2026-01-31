@@ -103,7 +103,10 @@ jobs:
         #if: ${{ inputs.coverage == true }}
         name: Add perl 'latest' if coverage is wanted
         run: |
-          echo '${{ steps.action.outputs.perl-versions }}'
+          echo '${{ steps.action.outputs.perl-versions }}' > perl.versions
+          perl -MJSON::PP -i -nE 'my $j = decode_json($_); push $j->@*, "latest" unless grep { $_ eq "latest" } $j->@*; print encode_json($j)' perl.versions
+          cat perl.versions
+          printf 'perl-versions=%s' "$(< perl.versions)" >> $GITHUB_OUTPUT
 
   linux:
     runs-on: ubuntu-latest
