@@ -195,14 +195,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
         run: |
-          if [[ -f 'xt/critic.t' ]]; then
-              cpanm --notest Test::Perl::Critic
+          if [[ -f 'xt/critic.tt' ]]; then
               prove --verbose xt/critic.t
           else
               printf '%s\n' 'critic.t does not exist'
               exit 0
           fi
-
-      - name: 'Show cpanm errors on failure'
-        if:  ${{ failure() }}
-        run: cat /home/runner/.cpanm/work/*/build.log
