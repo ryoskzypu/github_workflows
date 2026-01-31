@@ -27,7 +27,7 @@ See [perl-version parameters](https://github.com/perl-actions/perl-versions?tab=
 > - `critic` requires a *critic.t* file in the *xt* directory. See [critic.t example](https://github.com/ryoskzypu/App-prog/blob/main/xt/critic.t).
 
 > [!TIP]
-> To check if distribution files have been run through [perltidy](https://metacpan.org/pod/perltidy), enable [CodeLayout::RequireTidyCode](https://metacpan.org/pod/Perl::Critic::Policy::CodeLayout::RequireTidyCode) in [perlcritic config file](https://metacpan.org/dist/Perl-Critic/view/bin/perlcritic#CONFIGURATION).
+> To check if distribution files have been run through `perltidy`, enable [CodeLayout::RequireTidyCode](https://metacpan.org/pod/Perl::Critic::Policy::CodeLayout::RequireTidyCode) in [perlcritic config file](https://metacpan.org/dist/Perl-Critic/view/bin/perlcritic#CONFIGURATION).
 
 #### Examples
 
@@ -58,3 +58,4 @@ See [caller example](https://github.com/ryoskzypu/App-prog/blob/main/.github/wor
 - https://github.com/FGasper/perl-github-action-tips
 - https://metacpan.org/pod/Devel::Cover::Report::Coveralls
 - https://metacpan.org/pod/perlcritic
+- https://metacpan.org/pod/perltidy
