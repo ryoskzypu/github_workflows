@@ -68,6 +68,7 @@ jobs:
         if:  ${{ failure() }}
         run: cat /home/runner/.cpanm/work/*/build.log
 
+      # Module::Build
       - name: 'Configure with Build.PL'
         if: ${{ hashFiles('/Build.PL') != '' }}
         run: perl Build.PL
@@ -78,6 +79,7 @@ jobs:
         if: ${{ hashFiles('/Build.PL') != '' }}
         run: ./Build test verbose=1
 
+      # ExtUtils::MakeMaker
       - name: 'Configure with Makefile.PL'
         if: ${{ hashFiles('/Build.PL') == '' }}
         run: perl Makefile.PL
@@ -156,6 +158,7 @@ jobs:
         if:  ${{ failure() }}
         run: cat /home/runner/.cpanm/work/*/build.log
 
+      # Module::Build
       - name: 'Configure with Build.PL'
         if: ${{ hashFiles('/Build.PL') != '' }}
         run: perl Build.PL
@@ -170,6 +173,7 @@ jobs:
           AUTOMATED_TESTING: 1
           RELEASE_TESTING: 1
 
+      # ExtUtils::MakeMaker
       - name: 'Configure with Makefile.PL'
         if: ${{ hashFiles('/Build.PL') == '' }}
         run: perl Makefile.PL
