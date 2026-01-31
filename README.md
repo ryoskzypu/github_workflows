@@ -14,10 +14,10 @@ Based on:
 
 #### Input parameters
 
-- `since-perl`: include only perls since given version (starting with v5.8.0)
+- `since-perl`: include only perls since given version (starting with v5.24.0)
 - `to-perl`: include only perls up to given version
 - `with-devel`: include `devel` as well
-- `coverage`: if true, check the Perl code test coverage on latest perl and report the results to [Coveralls.io](https://coveralls.io)
+- `coverage`: if true, check the Perl code test coverage on `latest` and report the results to [Coveralls.io](https://coveralls.io)
 
 See [perl-version parameters](https://github.com/perl-actions/perl-versions?tab=readme-ov-file#parameters) for details.
 

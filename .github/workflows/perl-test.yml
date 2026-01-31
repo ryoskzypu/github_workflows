@@ -101,6 +101,7 @@ jobs:
 
       - id: massage
         name: Add perl 'latest' if coverage is wanted
+        shell: bash
         run: |
           echo '${{ steps.action.outputs.perl-versions }}' > perl.versions
           if [[ ${{ inputs.coverage }} = 'true' ]]; then
