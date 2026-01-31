@@ -39,6 +39,7 @@ on:
 
 jobs:
   # Test system perl on Linux
+
   ubuntu-latest:
     name: 'perl system'
     runs-on: ubuntu-latest
@@ -88,6 +89,7 @@ jobs:
         run: make test TEST_VERBOSE=1
 
   # Test multiple perl versions on Linux
+
   perl-versions:
     name: 'List perl versions'
     runs-on: ubuntu-latest
