@@ -100,7 +100,7 @@ jobs:
           with-devel: ${{ inputs.with-devel }}
 
       - id: massage
-        #if: ${{ inputs.coverage == true }}
+        if: ${{ inputs.coverage == true }}
         name: Add perl 'latest' if coverage is wanted
         run: |
           echo '${{ steps.action.outputs.perl-versions }}' > perl.versions
