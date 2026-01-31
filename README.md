@@ -42,7 +42,7 @@ jobs:
       coverage: true
 ```
 
-See [caller example](https://github.com/ryoskzypu/App-prog/blob/main/.github/workflows/test.yml).
+See [caller example](https://github.com/ryoskzypu/App-prog/blob/main/.github/workflows/ci.yml).
 
 ### See also
 
