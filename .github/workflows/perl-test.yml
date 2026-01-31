@@ -10,7 +10,10 @@ on:
         required: true
 
         # Require no newer version of perl than one released in the last ten years,
-        # following the agreement of the Perl Toolchain Gang. See https://perldoc.perl.org/perlhist.
+        # following the agreement of the Perl Toolchain Gang.
+        # See:
+        #   https://github.com/Perl-Toolchain-Gang/toolchain-site
+        #   https://perldoc.perl.org/perlhist.
         default: 'v5.24.0'
 
       to-perl:
