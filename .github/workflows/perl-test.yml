@@ -195,9 +195,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
         run: |
-          if [[ -f 'xt/critic.tt' ]]; then
+          if [[ -f 'xt/critic.t' ]]; then
               prove --verbose xt/critic.t
           else
-              printf '%s\n' 'critic.t does not exist'
-              exit 0
+              printf '%s\n' 'xt/critic.t does not exist'
+              exit 1
           fi
