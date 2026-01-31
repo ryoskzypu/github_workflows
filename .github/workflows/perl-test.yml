@@ -10,7 +10,7 @@ on:
         required: true
 
         # Require no newer version of perl than one released in the last ten years,
-        # following the agreement of the Perl Toolchain Gang.
+        # following the agreement of the Perl Toolchain Gang. See https://perldoc.perl.org/perlhist.
         default: 'v5.24.0'
 
       to-perl:
@@ -33,10 +33,9 @@ on:
         default: false
 
 jobs:
-
-  # Fast test on system perl
-
+  # Test system perl on Linux
   ubuntu-latest:
+    name: 'perl system'
     runs-on: ubuntu-latest
 
     # Prevent the entire test of failing if minimum perl version from distribution
@@ -53,44 +52,44 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - run: perl -V
-      - name: Install deps using cpanm
+      - name: 'Install dependencies with cpanm'
         uses: perl-actions/install-with-cpanm@v1
         with:
           sudo: false
           args: --sudo --installdeps --with-recommends .
 
-      - name: Show cpanm errors on Ubuntu
+      - name: 'Show cpanm errors on failure'
         if:  ${{ failure() }}
-        run: |
-           cat /home/runner/.cpanm/work/*/build.log
+        run: cat /home/runner/.cpanm/work/*/build.log
 
-      - name: Configure with Build.PL
+      - name: 'Configure with Build.PL'
         if: ${{ hashFiles('/Build.PL') != '' }}
         run: perl Build.PL
-      - name: Build with Build.PL
+      - name: 'Build with Build.PL'
         if: ${{ hashFiles('/Build.PL') != '' }}
         run: ./Build
-      - name: Test with Build.PL
+      - name: 'Test with Build.PL'
         if: ${{ hashFiles('/Build.PL') != '' }}
         run: ./Build test verbose=1
 
-      - name: Configure with Makefile.PL
+      - name: 'Configure with Makefile.PL'
         if: ${{ hashFiles('/Build.PL') == '' }}
         run: perl Makefile.PL
-      - name: Build with Makefile.PL
+      - name: 'Build with Makefile.PL'
         if: ${{ hashFiles('/Build.PL') == '' }}
         run: make
-      - name: Test with Makefile.PL
+      - name: 'Test with Makefile.PL'
         if: ${{ hashFiles('/Build.PL') == '' }}
         run: make test TEST_VERBOSE=1
 
-  # Linux testing - multiple perl versions
-
+  # Test multiple perl versions on Linux
   perl-versions:
+    name: 'List perl versions'
     runs-on: ubuntu-latest
-    name: List perl versions
+
     outputs:
       perl-versions: ${{ steps.massage.outputs.perl-versions }}
+
     steps:
       - id: action
         uses: perl-actions/perl-versions@v1
@@ -100,19 +99,26 @@ jobs:
           with-devel: ${{ inputs.with-devel }}
 
       - id: massage
-        name: Add perl 'latest' if coverage is wanted
+        name: 'Add perl latest if coverage is wanted'
         shell: bash
         run: |
-          echo '${{ steps.action.outputs.perl-versions }}' > perl.versions
+          printf '%s\n' '${{ steps.action.outputs.perl-versions }}' > perl.versions
+
           if [[ ${{ inputs.coverage }} = 'true' ]]; then
-              perl -MJSON::PP -i -nE 'my $j = decode_json($_); push $j->@*, "latest" unless grep { $_ eq "latest" } $j->@*; print encode_json($j)' perl.versions
+              perl -MJSON::PP -i -nE '
+                  my $j = decode_json($_);
+                  push $j->@*, "latest" unless grep { $_ eq "latest" } $j->@*;
+                  print encode_json($j);
+              '
+              perl.versions
           fi
+
           cat perl.versions
           printf 'perl-versions=%s' "$(< perl.versions)" >> $GITHUB_OUTPUT
 
   linux:
-    runs-on: ubuntu-latest
     name: "perl ${{ matrix.perl-version }}"
+    runs-on: ubuntu-latest
 
     permissions:
       contents: read
@@ -134,23 +140,23 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - run: perl -V
-      - name: Install deps using cpanm
+      - name: 'Install dependencies with cpanm'
         uses: perl-actions/install-with-cpanm@v1
         with:
           sudo: false
           args: -v --installdeps --with-recommends .
 
-      - name: Show cpanm errors on Ubuntu
+      - name: 'Show cpanm errors on failure'
         if:  ${{ failure() }}
         run: cat /home/runner/.cpanm/work/*/build.log
 
-      - name: Configure with Build.PL
+      - name: 'Configure with Build.PL'
         if: ${{ hashFiles('/Build.PL') != '' }}
         run: perl Build.PL
-      - name: Build with Build.PL
+      - name: 'Build with Build.PL'
         if: ${{ hashFiles('/Build.PL') != '' }}
         run: ./Build
-      - name: Test with Build.PL
+      - name: 'Test with Build.PL'
         if: ${{ hashFiles('/Build.PL') != '' }}
         run: ./Build test verbose=1
         env:
@@ -158,13 +164,13 @@ jobs:
           AUTOMATED_TESTING: 1
           RELEASE_TESTING: 1
 
-      - name: Configure with Makefile.PL
+      - name: 'Configure with Makefile.PL'
         if: ${{ hashFiles('/Build.PL') == '' }}
         run: perl Makefile.PL
-      - name: Build with Makefile.PL
+      - name: 'Build with Makefile.PL'
         if: ${{ hashFiles('/Build.PL') == '' }}
         run: make
-      - name: Test with Makefile.PL
+      - name: 'Test with Makefile.PL'
         if: ${{ hashFiles('/Build.PL') == '' }}
         run: make test TEST_VERBOSE=1
         env:
@@ -172,7 +178,7 @@ jobs:
           AUTOMATED_TESTING: 1
           RELEASE_TESTING: 1
 
-      - name: Report test coverage
+      - name: 'Report test coverage'
         if: ${{ inputs.coverage == true && matrix.perl-version == 'latest' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
