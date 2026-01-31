@@ -57,5 +57,4 @@ See [caller example](https://github.com/ryoskzypu/App-prog/blob/main/.github/wor
 - https://github.com/perl-actions/install-with-cpanm
 - https://github.com/FGasper/perl-github-action-tips
 - https://metacpan.org/pod/Devel::Cover::Report::Coveralls
-- https://metacpan.org/pod/perlcritic
 - https://metacpan.org/pod/perltidy
