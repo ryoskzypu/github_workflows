@@ -13,7 +13,7 @@ on:
         # following the agreement of the Perl Toolchain Gang.
         # See:
         #   https://github.com/Perl-Toolchain-Gang/toolchain-site
-        #   https://perldoc.perl.org/perlhist.
+        #   https://en.wikipedia.org/wiki/Perl_5_version_history
         default: 'v5.24.0'
 
       to-perl:
