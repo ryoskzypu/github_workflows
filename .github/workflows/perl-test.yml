@@ -12,7 +12,7 @@ on:
         # Require no newer version of perl than one released in the last ten years,
         # following the agreement of the Perl Toolchain Gang.
         # See:
-        #   https://github.com/Perl-Toolchain-Gang/toolchain-site
+        #   https://github.com/Perl-Toolchain-Gang/toolchain-site/blob/master/lyon-amendment.md
         #   https://en.wikipedia.org/wiki/Perl_5_version_history
         default: 'v5.24.0'
 
