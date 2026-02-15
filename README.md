@@ -15,7 +15,7 @@ Based on:
 #### Input parameters
 
 - `since-perl`: include only perls since given version (starting with v5.24.0)
-- `to-perl`: include only perls up to given version
+- `until-perl`: include only perls up to given version
 - `with-devel`: include `devel` as well
 - `coverage`: if true, check the Perl code test coverage on `latest` and report the results to [Coveralls.io](https://coveralls.io)
 - `critic`: if true, run `perlcritic` against the distribution files with [Test::Perl::Critic](https://metacpan.org/pod/Test::Perl::Critic)
@@ -23,7 +23,7 @@ Based on:
 See [perl-version parameters](https://github.com/perl-actions/perl-versions?tab=readme-ov-file#parameters) for details.
 
 > [!NOTE]
-> - `since-perl` and `to-perl` use values from [docker-perl-tester](https://github.com/Perl/docker-perl-tester#using-docker-images-for-your-projects).
+> - `since-perl` and `until-perl` use values from [docker-perl-tester](https://github.com/Perl/docker-perl-tester#using-docker-images-for-your-projects).
 > - `critic` requires a *critic.t* file in the *xt* directory. See [critic.t example](https://github.com/ryoskzypu/App-prog/blob/main/xt/critic.t).
 
 > [!TIP]

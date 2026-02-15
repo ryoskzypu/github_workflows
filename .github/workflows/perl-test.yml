@@ -5,7 +5,7 @@ on:
   workflow_call:
     inputs:
       since-perl:
-        description: 'Test with all perls since given version'
+        description: 'Test with all perls since given version (including)'
         type: string
         required: true
 
@@ -16,8 +16,8 @@ on:
         #   https://en.wikipedia.org/wiki/Perl_5_version_history
         default: 'v5.24.0'
 
-      to-perl:
-        description: 'Test with all perls up to given version'
+      until-perl:
+        description: 'Test with all perls up to given version (including)'
         type: string
 
       with-devel:
@@ -107,7 +107,7 @@ jobs:
         uses: perl-actions/perl-versions@v1
         with:
           since-perl: ${{ inputs.since-perl }}
-          to-perl: ${{ inputs.to-perl }}
+          until-perl: ${{ inputs.until-perl }}
           with-devel: ${{ inputs.with-devel }}
 
       - id: massage
