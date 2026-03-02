@@ -104,7 +104,7 @@ jobs:
 
     steps:
       - id: action
-        uses: perl-actions/perl-versions@v1
+        uses: perl-actions/perl-versions@v2.0
         with:
           since-perl: ${{ inputs.since-perl }}
           until-perl: ${{ inputs.until-perl }}
