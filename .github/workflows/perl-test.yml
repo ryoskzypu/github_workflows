@@ -155,7 +155,7 @@ jobs:
         uses: perl-actions/install-with-cpanm@v1
         with:
           sudo: false
-          args: --sudo --installdeps --with-recommends .
+          args: -v --installdeps --with-recommends .
 
       - name: 'Show cpanm errors on failure'
         if:  ${{ failure() }}
