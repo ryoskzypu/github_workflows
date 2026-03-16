@@ -61,9 +61,18 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - run: perl -V
+
+      - name: 'Cache dependencies'
+      - uses: actions/cache@v5
+        with:
+          path: ~/perl5
+          key: cpanm-${{ runner.os }}
+
       - name: 'Install dependencies with cpanm'
         uses: perl-actions/install-with-cpanm@v1
+        uses: ./
         with:
+          local-lib: '~/perl5'
           sudo: false
           args: --sudo --installdeps --with-recommends .
 
