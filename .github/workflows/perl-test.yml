@@ -71,7 +71,6 @@ jobs:
       - name: 'Install dependencies with cpanm'
         uses: perl-actions/install-with-cpanm@v1
         with:
-          local-lib: '~/perl5'
           sudo: false
           args: --sudo --installdeps --with-recommends .
 
@@ -169,7 +168,6 @@ jobs:
       - name: 'Install dependencies with cpanm'
         uses: perl-actions/install-with-cpanm@v1
         with:
-          local-lib: '~/perl5'
           sudo: false
           args: --sudo --installdeps --with-recommends .
 
