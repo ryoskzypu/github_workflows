@@ -62,7 +62,7 @@ jobs:
       - uses: actions/checkout@v6
       - run: perl -V
       - name: 'Install dependencies with cpanm'
-        uses: perl-actions/install-with-cpanm@v1
+        uses: perl-actions/install-with-cpanm@v2
         with:
           sudo: false
           args: --sudo --installdeps --with-recommends .
@@ -104,7 +104,7 @@ jobs:
 
     steps:
       - id: action
-        uses: perl-actions/perl-versions@v2.0
+        uses: perl-actions/perl-versions@v2
         with:
           since-perl: ${{ inputs.since-perl }}
           until-perl: ${{ inputs.until-perl }}
@@ -152,7 +152,7 @@ jobs:
       - uses: actions/checkout@v6
       - run: perl -V
       - name: 'Install dependencies with cpanm'
-        uses: perl-actions/install-with-cpanm@v1
+        uses: perl-actions/install-with-cpanm@v2
         with:
           sudo: false
           args: -v --installdeps --with-recommends .
