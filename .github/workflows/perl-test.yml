@@ -195,6 +195,9 @@ jobs:
         if: ${{ inputs.coverage == true && matrix.perl-version == 'latest' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          AUTHOR_TESTING: 1
+          AUTOMATED_TESTING: 1
+          RELEASE_TESTING: 1
         run: cover -test -report Coveralls
 
       - name: 'Run perlcritic'
