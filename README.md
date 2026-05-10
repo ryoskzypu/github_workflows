@@ -17,8 +17,8 @@ Based on:
 - `since-perl`: include only perls since given version (starting with v5.24.0)
 - `until-perl`: include only perls up to given version
 - `with-devel`: include `devel` as well
-- `coverage`: if true, check the Perl code test coverage on `latest` and report the results to [Coveralls.io](https://coveralls.io)
-- `critic`: if true, run `perlcritic` against the distribution files with [Test::Perl::Critic](https://metacpan.org/pod/Test::Perl::Critic)
+- `coverage`: if true, check the Perl code test coverage on highest perl and report the results to [Coveralls.io](https://coveralls.io)
+- `critic`: if true, run `perlcritic` against the distribution files on highest perl with [Test::Perl::Critic](https://metacpan.org/pod/Test::Perl::Critic)
 
 See [perl-version parameters](https://github.com/perl-actions/perl-versions?tab=readme-ov-file#parameters) for details.
 
