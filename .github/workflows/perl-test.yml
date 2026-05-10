@@ -198,7 +198,9 @@ jobs:
 
       - name: 'Report test coverage'
         #if: ${{ inputs.coverage == true && matrix.perl-version == needs.perl-versions.outputs.highest-perl }}
-        if: ${{ inputs.coverage == true && matrix.perl-version == '5.42' }}
+        if: ${{ inputs.coverage == true && needs.perl-versions.outputs.highest-perl == '5.42' }}
+        #if: |
+        #  inputs.coverage == true && matrix.perl-version == '${{ needs.perl-versions.outputs.highest-perl }}'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           AUTHOR_TESTING: 1
