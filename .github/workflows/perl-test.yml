@@ -111,21 +111,23 @@ jobs:
           with-devel: ${{ inputs.with-devel }}
 
       - id: massage
-        name: 'Add perl latest if coverage is wanted'
+        name: 'Get highest perl version if coverage or critic is wanted'
         shell: bash
         run: |
           printf '%s\n' '${{ steps.action.outputs.perl-versions }}' > perl.versions
 
-          if [[ ${{ inputs.coverage }} = 'true' ]]; then
-              perl -MJSON::PP -i -nE '
-                  my $j = decode_json($_);
-                  push $j->@*, "latest" unless grep { $_ eq "latest" } $j->@*;
-                  print encode_json($j);
-              ' perl.versions
+          if [[ ${{ inputs.coverage }} = 'true' || ${{ inputs.critic }} = 'true' ]]; then
+              highest_perl=$(
+                  perl -MJSON::PP -nE '
+                      my $j = decode_json($_);
+                      my @v = sort { $a <=> $b } grep { $_ ne "latest" && $_ ne "devel" } $j->@*;
+                      print $v[-1];
+                  ' perl.versions
+              )
           fi
 
-          cat perl.versions
-          printf 'perl-versions=%s' "$(< perl.versions)" >> $GITHUB_OUTPUT
+          printf '%s\n' "$highest_perl"
+          printf 'highest-perl=%s' "$highest_perl" >> $GITHUB_OUTPUT
 
   linux:
     name: "perl ${{ matrix.perl-version }}"
@@ -192,7 +194,7 @@ jobs:
           RELEASE_TESTING: 1
 
       - name: 'Report test coverage'
-        if: ${{ inputs.coverage == true && matrix.perl-version == 'latest' }}
+        if: ${{ inputs.coverage == true && matrix.perl-version == '${{ needs.perl-versions.outputs.highest-perl }}' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           AUTHOR_TESTING: 1
@@ -201,7 +203,7 @@ jobs:
         run: cover -test -report Coveralls
 
       - name: 'Run perlcritic'
-        if: ${{ inputs.critic == true && matrix.perl-version == 'latest' }}
+        if: ${{ inputs.critic == true && matrix.perl-version == '${{ needs.perl-versions.outputs.highest-perl }}' }}
         shell: bash
         run: |
           if [[ -f 'xt/critic.t' ]]; then
