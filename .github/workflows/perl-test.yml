@@ -197,7 +197,7 @@ jobs:
           RELEASE_TESTING: 1
 
       - name: 'Report test coverage'
-        if: ${{ inputs.coverage == true && matrix.perl-version == '${{ needs.perl-versions.outputs.highest-perl }}' }}
+        if: ${{ inputs.coverage == true && matrix.perl-version == needs.perl-versions.outputs.highest-perl }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           AUTHOR_TESTING: 1
@@ -206,7 +206,7 @@ jobs:
         run: cover -test -report Coveralls
 
       - name: 'Run perlcritic'
-        if: ${{ inputs.critic == true && matrix.perl-version == '${{ needs.perl-versions.outputs.highest-perl }}' }}
+        if: ${{ inputs.critic == true && matrix.perl-version == needs.perl-versions.outputs.highest-perl }}
         shell: bash
         run: |
           if [[ -f 'xt/critic.t' ]]; then
