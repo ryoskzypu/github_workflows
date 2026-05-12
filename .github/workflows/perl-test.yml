@@ -73,24 +73,24 @@ jobs:
 
       # Module::Build
       - name: 'Configure with Build.PL'
-        if: ${{ hashFiles('/Build.PL') != '' }}
+        if: ${{ hashFiles('Build.PL') != '' }}
         run: perl Build.PL
       - name: 'Build with Build.PL'
-        if: ${{ hashFiles('/Build.PL') != '' }}
+        if: ${{ hashFiles('Build.PL') != '' }}
         run: ./Build
       - name: 'Test with Build.PL'
-        if: ${{ hashFiles('/Build.PL') != '' }}
+        if: ${{ hashFiles('Build.PL') != '' }}
         run: ./Build test verbose=1
 
       # ExtUtils::MakeMaker
       - name: 'Configure with Makefile.PL'
-        if: ${{ hashFiles('/Build.PL') == '' }}
+        if: ${{ hashFiles('Build.PL') == '' }}
         run: perl Makefile.PL
       - name: 'Build with Makefile.PL'
-        if: ${{ hashFiles('/Build.PL') == '' }}
+        if: ${{ hashFiles('Build.PL') == '' }}
         run: make
       - name: 'Test with Makefile.PL'
-        if: ${{ hashFiles('/Build.PL') == '' }}
+        if: ${{ hashFiles('Build.PL') == '' }}
         run: make test TEST_VERBOSE=1
 
   # Test multiple perl versions on Linux
@@ -167,13 +167,13 @@ jobs:
 
       # Module::Build
       - name: 'Configure with Build.PL'
-        if: ${{ hashFiles('/Build.PL') != '' }}
+        if: ${{ hashFiles('Build.PL') != '' }}
         run: perl Build.PL
       - name: 'Build with Build.PL'
-        if: ${{ hashFiles('/Build.PL') != '' }}
+        if: ${{ hashFiles('Build.PL') != '' }}
         run: ./Build
       - name: 'Test with Build.PL'
-        if: ${{ hashFiles('/Build.PL') != '' }}
+        if: ${{ hashFiles('Build.PL') != '' }}
         run: ./Build test verbose=1
         env:
           AUTHOR_TESTING: 1
@@ -182,13 +182,13 @@ jobs:
 
       # ExtUtils::MakeMaker
       - name: 'Configure with Makefile.PL'
-        if: ${{ hashFiles('/Build.PL') == '' }}
+        if: ${{ hashFiles('Build.PL') == '' }}
         run: perl Makefile.PL
       - name: 'Build with Makefile.PL'
-        if: ${{ hashFiles('/Build.PL') == '' }}
+        if: ${{ hashFiles('Build.PL') == '' }}
         run: make
       - name: 'Test with Makefile.PL'
-        if: ${{ hashFiles('/Build.PL') == '' }}
+        if: ${{ hashFiles('Build.PL') == '' }}
         run: make test TEST_VERBOSE=1
         env:
           AUTHOR_TESTING: 1
