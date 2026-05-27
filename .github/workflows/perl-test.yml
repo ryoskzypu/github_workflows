@@ -71,8 +71,8 @@ jobs:
         if: ${{ inputs.system-packages != '' }}
         shell: bash
         run: |
-          apt update
-          apt install -y ${{ inputs.system-packages }}
+          sudo apt update
+          sudo apt install -y ${{ inputs.system-packages }}
 
       - name: 'Install dependencies with cpanm'
         uses: perl-actions/install-with-cpanm@v2
