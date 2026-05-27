@@ -40,6 +40,11 @@ on:
         type: boolean
         default: false
 
+      system-packages:
+        description: 'System packages to install (space-separated)'
+        type: string
+        required: false
+
 jobs:
   # Test system perl on Linux
 
@@ -61,6 +66,14 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - run: perl -V
+
+      - name: 'Install system packages'
+        if: ${{ inputs.system-packages != '' }}
+        shell: bash
+        run: |
+          apt update
+          apt install -y ${{ inputs.system-packages }}
+
       - name: 'Install dependencies with cpanm'
         uses: perl-actions/install-with-cpanm@v2
         with:
@@ -110,6 +123,7 @@ jobs:
           since-perl: ${{ inputs.since-perl }}
           until-perl: ${{ inputs.until-perl }}
           with-devel: ${{ inputs.with-devel }}
+          target: perl-trixie
 
       - id: massage
         name: 'Get highest perl version if coverage or critic is wanted'
@@ -150,11 +164,19 @@ jobs:
         perl-version: ${{ fromJson (needs.perl-versions.outputs.perl-versions) }}
 
     container:
-      image: perldocker/perl-tester:${{ matrix.perl-version }}
+      image: perldocker/perl-tester:${{ matrix.perl-version }}-trixie
 
     steps:
       - uses: actions/checkout@v6
       - run: perl -V
+
+      - name: 'Install system packages'
+        if: ${{ inputs.system-packages != '' }}
+        shell: bash
+        run: |
+          apt update
+          apt install -y ${{ inputs.system-packages }}
+
       - name: 'Install dependencies with cpanm'
         uses: perl-actions/install-with-cpanm@v2
         with:
