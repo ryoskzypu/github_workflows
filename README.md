@@ -19,12 +19,14 @@ Based on:
 - `with-devel`: include `devel` as well
 - `coverage`: if true, check the Perl code test coverage on highest perl and report the results to [Coveralls.io](https://coveralls.io)
 - `critic`: if true, run `perlcritic` against the distribution files on highest perl with [Test::Perl::Critic](https://metacpan.org/pod/Test::Perl::Critic)
+- `system-packages`: space-separated system packages to install
 
 See [perl-version parameters](https://github.com/perl-actions/perl-versions?tab=readme-ov-file#parameters) for details.
 
 > [!NOTE]
 > - `since-perl` and `until-perl` use values from [docker-perl-tester](https://github.com/Perl/docker-perl-tester#using-docker-images-for-your-projects).
 > - `critic` requires a *critic.t* file in the *xt* directory. See [critic.t example](https://github.com/ryoskzypu/App-prog/blob/main/xt/critic.t).
+> - `system-packages` packages must exist in Ubuntu and Debian repos.
 
 > [!TIP]
 > To check if distribution files have been run through `perltidy`, enable [CodeLayout::RequireTidyCode](https://metacpan.org/pod/Perl::Critic::Policy::CodeLayout::RequireTidyCode) in [perlcritic config file](https://metacpan.org/dist/Perl-Critic/view/bin/perlcritic#CONFIGURATION).
