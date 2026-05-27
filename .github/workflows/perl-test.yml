@@ -123,7 +123,6 @@ jobs:
           since-perl: ${{ inputs.since-perl }}
           until-perl: ${{ inputs.until-perl }}
           with-devel: ${{ inputs.with-devel }}
-          target: perl-trixie
 
       - id: massage
         name: 'Get highest perl version if coverage or critic is wanted'
@@ -164,7 +163,7 @@ jobs:
         perl-version: ${{ fromJson (needs.perl-versions.outputs.perl-versions) }}
 
     container:
-      image: perldocker/perl-tester:${{ matrix.perl-version }}-trixie
+      image: perldocker/perl-tester:${{ matrix.perl-version }}
 
     steps:
       - uses: actions/checkout@v6
