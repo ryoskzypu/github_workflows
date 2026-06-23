@@ -64,7 +64,7 @@ jobs:
       PERL_CARTON_PATH: $GITHUB_WORKSPACE/local
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - run: perl -V
 
       - name: 'Install system packages'
@@ -166,7 +166,7 @@ jobs:
       image: perldocker/perl-tester:${{ matrix.perl-version }}
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - run: perl -V
 
       - name: 'Install system packages'
